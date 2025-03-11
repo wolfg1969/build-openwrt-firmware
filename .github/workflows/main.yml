@@ -44,7 +44,7 @@ jobs:
       run: |
         git clone $REPO_URL openwrt
         ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        ls $GITHUB_WORKSPACE/openwrt
+        echo "$GITHUB_WORKSPACE/openwrt"
 
     #- name: Cache
     #  uses: actions/cache@v3.4.3
