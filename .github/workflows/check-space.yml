@@ -11,7 +11,7 @@ env:
 jobs:
   check_disk_space:
     name: Check Disk Space
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout
       uses: actions/checkout@main
