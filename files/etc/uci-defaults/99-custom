@@ -1,0 +1,8 @@
+cat << "EOF" > /etc/uci-defaults/99-custom
+uci -q batch << EOI
+set network.lan.ipaddr='192.168.1.254'
+[ "$(uci -q get system.@system[0].zonename)" = "Asia/Shanghai" ] && exit 0
+set system.@system[0].zonename='Asia/Shanghai'
+set system.@system[0].timezone='UTC+8'
+EOI
+EOF
