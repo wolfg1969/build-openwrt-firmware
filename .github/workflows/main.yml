@@ -13,6 +13,7 @@ env:
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: false
+  CONFIG_DIFF_FILE: my-router.config
 
 jobs:
   build_openwrt_firmware:
@@ -42,6 +43,7 @@ jobs:
       with:
         # A list of files, directories, and wildcard patterns to cache and restore
         path: ${{ github.workspace }}/openwrt
+        key: openwrt-source
 
     - name: Choose a release
       run: |
@@ -71,7 +73,7 @@ jobs:
     - name: Load custom configuration
       run: |
         [ -d files ] && cp -r files openwrt/files
-        [ -f $CONFIG_DIFF_FILE ] && mv $CONFIG_DIFF_FILE openwrt/.config
+        [ -f $CONFIG_DIFF_FILE ] && cp $CONFIG_DIFF_FILE openwrt/.config
         TODAY=$(date +%Y-%m-%d)
         sh -c "sed -i -e 's/CONFIG_VERSION_NUMBER=.*/CONFIG_VERSION_NUMBER=\"${TODAY}\"/' openwrt/.config"
 
