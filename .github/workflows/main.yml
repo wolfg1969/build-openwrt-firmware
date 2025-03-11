@@ -18,7 +18,7 @@ env:
 jobs:
   build_openwrt_firmware:
     name: Build OpenWrt Firmware
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@main
@@ -27,28 +27,31 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        echo "Before free up disk space"; df -hT
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc /etc/mysql /etc/php /usr/local/share/boost "$AGENT_TOOLSDIRECTORY"
+        sudo -E apt-get -y purge azure-cli* docker* ghc* zulu* hhvm* llvm* firefox* google* dotnet* aspnetcore* powershell* openjdk* adoptopenjdk* mysql* php* mongodb* moby* snap* || true
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004) tree
+        sudo -E apt-get -qq install libfuse-dev $(curl -fsSL git.io/depends-ubuntu-2004)
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
+        sudo mkdir -p /mnt/workdir
+        sudo chown $USER:$GROUPS /mnt/workdir
+        echo "After free up disk space"; df -hT
         
     - name: Clone source code
-      working-directory: /workdir
+      working-directory: /mnt/workdir
       run: |
         git clone $REPO_URL openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        cd openwrt
+        ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        ls $GITHUB_WORKSPACE/openwrt
 
-    - name: Cache
-      uses: actions/cache@v3.4.3
-      with:
+    #- name: Cache
+    #  uses: actions/cache@v3.4.3
+    #  with:
         # A list of files, directories, and wildcard patterns to cache and restore
-        path: ${{ github.workspace }}/openwrt
-        key: openwrt-source
+    #    path: ${{ github.workspace }}/openwrt
+    #    key: openwrt-source
 
     - name: Choose a release
       run: |
