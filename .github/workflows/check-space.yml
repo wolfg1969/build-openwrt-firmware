@@ -6,18 +6,11 @@ on:
   workflow_dispatch:
 
 env:
-  REPO_URL: https://github.com/openwrt/openwrt.git
-  RELEASE_TAG: v24.10.0
-  ARGON_THEME_RELEASE_TAG: v2.3.2
   TZ: Asia/Shanghai
-  UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
-  UPLOAD_RELEASE: false
-  CONFIG_DIFF_FILE: my-router.config
 
 jobs:
-  build_openwrt_firmware:
-    name: Build OpenWrt Firmware
+  check_disk_space:
+    name: Check Disk Space
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -28,7 +21,6 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         echo "Before free up disk space"; df -h
-        docker rmi `docker images -q`
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc /etc/mysql /etc/php /usr/local/share/boost "$AGENT_TOOLSDIRECTORY"
         sudo -E apt-get -y purge azure-cli* docker* ghc* zulu* hhvm* llvm* firefox* google* dotnet* aspnetcore* powershell* openjdk* adoptopenjdk* mysql* php* mongodb* moby* snap* || true
         sudo -E apt-get -qq update
