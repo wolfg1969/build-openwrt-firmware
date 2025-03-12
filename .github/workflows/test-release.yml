@@ -15,8 +15,15 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@main
+
+    - name: Test
+      id: test
+      run: |
+        echo "status=success" >> $GITHUB_OUTPUT
+      
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v2
+      if: steps.test.outputs.status == 'success'
       with:
         tag_name: test_release
         files: ${{ github.workspace }}/my-router.config
@@ -25,7 +32,7 @@ jobs:
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.4
-      if: steps.tag.outputs.status == 'success'
+      if: steps.test.outputs.status == 'success'
       with:
         keep_latest: 1
         delete_tags: true
