@@ -1,4 +1,4 @@
-name: Build OpenWrt Firwmare
+name: Build OpenWrt Firwmare for Router (x86_64)
 
 on:
   # push:
