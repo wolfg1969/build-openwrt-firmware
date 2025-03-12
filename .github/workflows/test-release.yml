@@ -1,0 +1,26 @@
+name: Test Release
+
+on:
+  # push:
+  repository_dispatch:
+  workflow_dispatch:
+
+jobs:
+  test_release:
+    name: Test Release
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Upload firmware to release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: test_release
+        files: ${{ github.workspace }}/my-router.config
+
+    - name: Remove old Releases
+      uses: dev-drprasad/delete-older-releases@v0.3.4
+      if: steps.tag.outputs.status == 'success'
+      with:
+        keep_latest: 1
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
