@@ -18,7 +18,7 @@ env:
 jobs:
   build_openwrt_firmware:
     name: Build OpenWrt Firmware
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@main
@@ -140,9 +140,9 @@ jobs:
     - name: Generate release tag
       id: tag
       run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+        echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
         echo "OpenWRT firmware ${{env.RELEASE_NAME}}" > openwrt-release.txt
-        echo "::set-output name=status::success"
+        echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
