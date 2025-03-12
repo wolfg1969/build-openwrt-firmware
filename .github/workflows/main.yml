@@ -123,6 +123,7 @@ jobs:
         echo "tree directory ....."
         cd openwrt
         tree -L 2 -d
+        [ -d bin/targets ] && cd bin/targets;tree -L 2
 
     - name: Prepare artifact
       run: |
