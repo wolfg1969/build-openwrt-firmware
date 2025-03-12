@@ -101,7 +101,7 @@ jobs:
       run: |
         cd openwrt
         echo -e "compile"
-        # make -j$(nproc) || make -j1 V=s
+        make -j$(nproc) || make -j1 V=s
         echo "======================="
         echo "Space usage:"
         echo "======================="
@@ -129,8 +129,8 @@ jobs:
       run: |
         TEMP=$(date +"OpenWrt_${{ env.DEVICE_NAME }}_%Y%m%d_%H%M%S_")$(git rev-parse --short HEAD)
         echo "RELEASE_TAG=$TEMP" >> $GITHUB_ENV
-        # tar -cvzf ${{ github.workspace }}/${{env.RELEASE_NAME}} openwrt/bin/targets/x86/64/* --owner=0 --group=0
-        # rm -rf $(find openwrt/bin/targets/ -type d -name "packages")
+        tar -cvzf ${{ github.workspace }}/${{env.RELEASE_NAME}} openwrt/bin/targets/x86/64/* --owner=0 --group=0
+        rm -rf $(find openwrt/bin/targets/ -type d -name "packages")
 
     - name: Upload firmware
       uses: actions/upload-artifact@v4
