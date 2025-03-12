@@ -109,7 +109,7 @@ jobs:
         echo "======================="
         echo "status=success" >> $GITHUB_OUTPUT
         tdev=$(grep "CONFIG_TARGET_PROFILE" .config | awk -F= '{print $2}' | tr -d '"')
-        DEVICE_NAME=${tdev##DEVICE_}
+        DEVICE_NAME=x86_64_${tdev##DEVICE_}
         FILE_DATE=_$(date +"%Y%m%d%H%M")
         GIT_REV=_$(git rev-parse --short HEAD)
         echo "DEVICE_NAME=${DEVICE_NAME}" >> $GITHUB_ENV
@@ -123,7 +123,7 @@ jobs:
         echo "tree directory ....."
         cd openwrt
         tree -L 2 -d
-        [ -d bin/targets ] && cd bin/targets;tree -L 2
+        [ -d bin/targets ] && cd bin/targets;pwd;tree -L 2
 
     - name: Prepare artifact
       run: |
